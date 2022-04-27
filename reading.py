@@ -2,9 +2,6 @@ import cv2 as cv
 import helper
 import numpy as np
 import math
-import os
-import matplotlib.pyplot as plt
-import statistics
 
 src = cv.imread("dial_face.jpg")
 dst = cv.Canny(src, 50, 200, None, 3)
