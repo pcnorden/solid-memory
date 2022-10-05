@@ -3,6 +3,11 @@ This is a side project that I'm making for work where I need to calibrate a lot 
 
 This is very much a side project that will be worked on-and-off through my spare time and have no clear direction, but hopefully once more features are added, this readme will include more information.
 
+# Screenshot
+Well, first of all, this window is created by a testing script that I have for playing around in and this is not yet in the software, but the pink circles in the image are the graduations found on a dial indicator face.
+
+![Screenshot of testing software](./images/Testing_screenshot2022.png)
+
 # How to run
 This software is mostly developed in python and opencv under linux enviroments so Mac and Windows platforms I don't care about.
 
@@ -26,3 +31,4 @@ on the command line.
 |`dial.jpg`|This is a closeup of a Mitutoyo dial indiactor I took with my camera and macro lens in hopes that I would be able to use it to test my program out on.|Currently unused due to techical problems|
 |`dial_2.jpg`|Another closeup of the same Mitutoyo dial indiactor, but this time it had a white paper behind it to help filter out the background in the program.|Currently unused due to processing times, but `dial_face.jpg` was extracted from this image|
 |`dial_face.jpg`|This image is a closeup of the dial indicator face generated from `dial_2.jpg` but this is also a smaller image so it gets processed much faster which is the main reason it's used to test basically everything right now.|Actively used a lot|
+|`dial_face_720p.png`|This image is basically the same as the normal `dial_face.jpg` file, except scaled to 720p due to experimenting taking a long time processing such large photos, and which basically all the program will use to test itself against from now on|
