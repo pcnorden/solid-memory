@@ -6,6 +6,64 @@ def scale(src, size_percentage: int):
 	dsize = (int(src.shape[1]*size_percentage/100), int(src.shape[0]*size_percentage/100))
 	return cv.resize(src, dsize)
 
+class masker:
+	"""This class will take a grayscale image input, adaptive threshold the image and
+	then let you create visible masks around the image"""
+	# Source for the masking: https://stackoverflow.com/questions/61758071/how-to-blackout-area-outside-circle-with-opencv-python
+	def __init__(self, src: cv.Mat):
+		# Check if the color space on the image is correct since that's what runs the whole show
+		if getColorChannels(src) != 1:
+			raise ValueError("Color space needs to be gray-scale!")
+		self.img = src
+		# Lets pre-calculate image center point so we don't have to do it a million more times later on
+		self.y_center = int(src.shape[0]/2)
+		self.x_center = int(src.shape[1]/2)
+		# Lets create a mask image too while we are at it so we are prepared incase the
+		# user would like to mask things from the raw grayscale image.
+		self.mask = np.zeros_like(src)
+	
+	def mask_radius(self, radius: int, visible: bool, center_point: tuple = None) -> None:
+		"""Takes a radius, visibility and a (optional) center point.
+		
+		Please note that to hide internal features, you need to call this with the smaller radius
+		and `visible` flag set to `False`"""
+		# Check if there was a center point provided and if not, just use pre-calculated image center point
+		if center_point == None:
+			# Figure out if the color should be white (let stuff through), or black (don't let stuff through)
+			clr = (255,255,255) if visible else (0,0,0)
+			# Draw the circle on the completely dark, or already modified, mask image we pre-created in the __init__ function
+			self.mask = cv.circle(self.mask, (self.x_center, self.y_center), radius, clr, cv.FILLED)
+		else:
+			# Figure out if the color should be white or black
+			clr = (255,255,255) if visible else (0,0,0)
+			self.mask = cv.circle(self.mask, center_point, radius, clr, cv.FILLED)
+	
+	def mask_rectangle(self, pt1: tuple, pt2: tuple, visible: bool) -> None:
+		"""Takes 2 points in the X-Y plane as tuples and a visibility flag and either blocks stuff, or lets stuff right through
+		the masking."""
+		self.mask = cv.rectangle(self.mask, pt1, pt2, (255,255,255) if visible else (0,0,0), cv.FILLED)
+	
+	def get_image(self, block_size: int, invert: bool = True) -> cv.Mat:
+		"""Returns the image, masked and adaptive-thresholded.
+		
+		@param block_size: The block size that shall be used in the call to `adaptiveThreshold()`. Needs to be a number that isn't divisible by 2!
+		
+		@param invert: Invert the black and white. This is highly suggested when using findCountours as it finds white items."""
+		if(block_size%2 == 0):
+			raise ValueError("block_size can't be a even number!")
+		# Create a local temporary copy of the source image that will first be ran through the adaptive threshold so
+		# the adaptive threshold won't have a chance to make the masked areas leave a border.
+		temp_img = self.img
+		if(invert):
+			temp_img = cv.adaptiveThreshold(self.img, 255, cv.ADAPTIVE_THRESH_MEAN_C, cv.THRESH_BINARY_INV, block_size, 5)
+		else:
+			temp_img = cv.adaptiveThreshold(temp_img, 255, cv.ADAPTIVE_THRESH_MEAN_C, cv.THRESH_BINARY, block_size, 5)
+		# Use the mask created and combine them with a bitwise AND method to hide the parts of the image that are in black parts of the mask
+		temp_img = cv.bitwise_and(temp_img, self.mask)
+		# Return the image to the calling function
+		return temp_img
+
+# TODO: Rewrite this function since `masker` was introduced above
 def extract_bars(src: cv.Mat, outer_radius: int, inner_radius: int, block_size: int, blur_kernel_size: int):
 	"""Takes a black-and-white image, runs filtering
 	and some correction from the filtering and then detects the
@@ -101,3 +159,12 @@ def maxLineLength(line: np.ndarray, maxLineLength: int) -> bool:
 	point1 = (line[0][0], line[0][1])
 	point2 = (line[0][2], line[0][3])
 	return math.dist([point1, point2]) <= maxLineLength
+
+def getColorChannels(src: cv.Mat) -> int:
+	"""Returns how many color channels a provided image has."""
+	if len(src.shape) == 2:
+		return 1
+	elif len(src.shape) >= 3:
+		return src.shape[2]
+	elif len(src.shape) < 2:
+		raise ValueError("Source image can't have less than 2 items in it!")
