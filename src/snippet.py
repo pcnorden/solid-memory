@@ -38,7 +38,7 @@ def Threshold_Demo(val):
 	dst = helper.scale(dst, 30)
 	cv.imshow(window_name, dst)
 
-src = cv.imread("dial_face.jpg")
+src = cv.imread("../images/dial_face.jpg")
 src_gray = cv.cvtColor(src, cv.COLOR_BGR2GRAY)
 cv.namedWindow(window_name)
 cv.createTrackbar(trackbar_type, window_name, 3, max_type, Threshold_Demo)

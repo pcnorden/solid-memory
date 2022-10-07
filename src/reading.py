@@ -3,7 +3,7 @@ import helper
 import numpy as np
 import math
 
-src = cv.imread("images/dial_face_720p.png") # Originally dial_face.jpg
+src = cv.imread("../images/dial_face_720p.png") # Originally dial_face.jpg
 dst = cv.Canny(src, 50, 200, None, 3)
 cdst = cv.cvtColor(dst, cv.COLOR_GRAY2BGR)
 window_name = "HoughLinesP debugger"
