@@ -1,4 +1,9 @@
+# folders I want to ignore
 __pycache__/
+.pytest_cache/
+.vscode/
+
+# Files that doesn't belong out in the wild due to horrible accidents
 degreelogging.txt
 debugging.py
 documentation.md
