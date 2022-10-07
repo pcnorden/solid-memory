@@ -164,7 +164,7 @@ def getColorChannels(src: cv.Mat) -> int:
 	"""Returns how many color channels a provided image has."""
 	if len(src.shape) == 2:
 		return 1
-	elif len(src.shape) >= 3:
+	elif len(src.shape) == 3:
 		return src.shape[2]
-	elif len(src.shape) < 2:
-		raise ValueError("Source image can't have less than 2 items in it!")
+	else:
+		raise ValueError("Image shape has unknown shape data in it!")

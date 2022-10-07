@@ -1,3 +1,7 @@
+import cv2 as cv
+import helper
+import numpy as np
+
 def face_lines(src_img):
 	src = src_img
 	dst = cv.Canny(src, 50, 200, None, 3)
