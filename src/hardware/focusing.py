@@ -100,6 +100,9 @@ def main():
 if __name__ == "__main__":
 	#main()
 	cap = cv.VideoCapture(2)
+	if cap.isOpened() == False:
+		print("No webcam connected, aborting")
+		exit(0)
 	cap.set(cv.CAP_PROP_AUTOFOCUS, 0) # Disable autofocus so we can manually control it
 	cap.set(cv.CAP_PROP_FOCUS, 0) # Set focus to 0 from the start
 	cap.set(cv.CAP_PROP_FRAME_WIDTH, 1280) # Set the image width
@@ -114,7 +117,7 @@ if __name__ == "__main__":
 	for i in range(0, 52):
 		print("Loop {} out of 51".format(i))
 		change_focus(i, cap)
-		time.sleep(0.5)
+		#time.sleep(0.5)
 		# Get around OpenCV's buffering
 		for heck in range(0,10):
 			cap.read() # Read 9 images just to clear out the buffer and so we get new pictures
@@ -143,3 +146,6 @@ if __name__ == "__main__":
 	fig, ax = plt.subplots()
 	ax.plot(x, y, linewidth=2.5)
 	plt.show()
+	cap.set(cv.CAP_PROP_AUTOFOCUS, 1) # Enable autofocus again so focusing won't smash the sensor
+	time.sleep(0.5) # Wait a bit before we release the handle
+	cap.release()
