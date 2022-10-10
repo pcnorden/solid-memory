@@ -25,8 +25,12 @@ def main():
 
 	cap = cv.VideoCapture(2)
 	cap.set(cv.CAP_PROP_AUTOFOCUS, 0)
+	# Set the video size to capture 1080p images from the 1080p capable camera
+	cap.set(cv.CAP_PROP_FRAME_WIDTH, 1280)
+	cap.set(cv.CAP_PROP_FRAME_HEIGHT, 720)
+	# Add a way to get 30 fps video also since opencv limits the camera to 5 FPS right now
 
-	cv.namedWindow("Video")
+	cv.namedWindow("Video", cv.WINDOW_NORMAL) # A way to view 1080p images in a normal window
 
 	convert_rgb = True
 	fps = int(cap.get(cv.CAP_PROP_FPS))
@@ -59,7 +63,6 @@ def main():
 			cap.set(cv.CAP_PROP_CONVERT_RGB, 1 if convert_rgb else 0)
 		if cv.getWindowProperty("Video", cv.WND_PROP_VISIBLE) < 1:
 			break
-	print("Done")
 
 if __name__ == "__main__":
 	main()
