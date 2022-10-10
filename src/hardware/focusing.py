@@ -24,18 +24,16 @@ def main():
 	color = (0,255,0)
 
 	cap = cv.VideoCapture(2)
-	#cap.set(cv.CAP_PROP_AUTOFOCUS, 0)
+	cap.set(cv.CAP_PROP_AUTOFOCUS, 0)
 
 	cv.namedWindow("Video")
 
 	convert_rgb = True
 	fps = int(cap.get(cv.CAP_PROP_FPS))
 	focus = int(min(cap.get(cv.CAP_PROP_FOCUS)*100, 2**31-1))
-	print("Initial focus: {}".format(focus))
 
 	cv.createTrackbar("FPS", "Video", fps, 30, lambda v: cap.set(cv.CAP_PROP_FPS, v))
-	cv.createTrackbar("Focus", "Video", focus, 51, lambda v: cap.set(cv.CAP_PROP_FOCUS, v*5)) # TODO: Fix this broken manual focusing
-	#cv.createTrackbar("Focus", "Video", focus, 51, change_focus)
+	cv.createTrackbar("Focus", "Video", focus, 51, lambda v: cap.set(cv.CAP_PROP_FOCUS, v*5))
 	while True:
 		_status, img = cap.read()
 
