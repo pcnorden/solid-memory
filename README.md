@@ -14,15 +14,23 @@ This software is mostly developed in python and opencv under linux enviroments s
 ## Prerequesits
 1. Have python 3 installed ofcourse, since python 2 is long since EOL.
 
-2. Have a somewhat recent version of opencv-python package installed. For me on Ubuntu it was installed through  
-`pip3 install opencv-python`  
-on the command line.
+2. Install packages from requirements.txt
+
+3. Have sanity to go through my code dumps that are without a lot of comments currently. (working on fixing this slowly)
 
 # Files
 
-`reading.py` is the current program where things are getting developed and getting things to extract angles and such between lines on the dial face. Lots of comments to be written to document the software there yet to come, but main place where you will see things happening.
+`src/reading.py` is the current program where things are getting developed and getting things to extract angles and such between lines on the dial face. Lots of comments to be written to document the software there yet to come, but main place where you will see things happening.
 
-`sensing.py` This was version 1 of the program that was made, but due to better comments, it's staying around for right now until I have documented the whole of reading.py and then this file will be basically bulldozered and rebuilt with the main logic of the program and maybe some fanzy Qt UI if I ever can get to grips to understand how that works.
+`src/sensing.py` This was version 1 of the program that was made, but due to better comments, it's staying around for right now until I have documented the whole of reading.py and then this file will be basically bulldozered and rebuilt with the main logic of the program and maybe some fanzy Qt UI if I ever can get to grips to understand how that works.
+
+`src/hardware/focusing.py` This is the file that I will be experimenting with in order to make a focusing system that actually works with my webcam for getting really up close to a dial indiactor. Currently I've just placed some code in there to remind me of the workflow I'm gonna be using, but right now it's not even close to complete.
+
+`src/background_remover.py` This part will be the one that removes the background and only brings forth the needle that the dial indicator will be showing, which will later on extract a image of the needle using the foreground mask to extract the needle from the captured image from the webcam. This will probably come after I've fixed focusing.py and I've done a fixture to hold a dial indicator in.
+
+`src/helper.py` This is where generic functions that will be used a lot in different files all over the place will be placed. It currently has some specific code, but it will be moved later on.
+
+`test/test_helper.py` This is the current test harness that I have so far written for `src/helper.py`. More testing code will follow as I uncover mistakes I make in my code to make sure I won't repeat those mistakes. Also, not all functions or code is tested due to me moving away from scaling and some other stuff.
 
 ## Image files
 
