@@ -7,4 +7,4 @@ __pycache__/
 degreelogging.txt
 debugging.py
 documentation.md
-mainwindow.ui
+src/ui_resources/*
