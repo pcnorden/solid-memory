@@ -57,11 +57,12 @@ def main():
 	color = (0,255,0)
 
 	cap = cv.VideoCapture(2)
+	cap.set(cv.CAP_PROP_FPS, 30.0)
+	cap.set(cv.CAP_PROP_FOURCC, cv.VideoWriter.fourcc('m','j','p','g'))
+	cap.set(cv.CAP_PROP_FOURCC, cv.VideoWriter.fourcc('M','J','P','G'))
+	cap.set(cv.CAP_PROP_FRAME_WIDTH, 1920)
+	cap.set(cv.CAP_PROP_FRAME_HEIGHT, 1080)
 	cap.set(cv.CAP_PROP_AUTOFOCUS, 0)
-	# Set the video size to capture 1080p images from the 1080p capable camera
-	cap.set(cv.CAP_PROP_FRAME_WIDTH, 1280)
-	cap.set(cv.CAP_PROP_FRAME_HEIGHT, 720)
-	# Add a way to get 30 fps video also since opencv limits the camera to 5 FPS right now
 
 	cv.namedWindow("Video", cv.WINDOW_NORMAL) # A way to view 1080p images in a normal window
 
@@ -103,11 +104,13 @@ if __name__ == "__main__":
 	if cap.isOpened() == False:
 		print("No webcam connected, aborting")
 		exit(0)
+	cap.set(cv.CAP_PROP_FPS, 30.0)
+	cap.set(cv.CAP_PROP_FOURCC, cv.VideoWriter.fourcc('m','j','p','g'))
+	cap.set(cv.CAP_PROP_FOURCC, cv.VideoWriter.fourcc('M','J','P','G'))
+	cap.set(cv.CAP_PROP_FRAME_WIDTH, 1920)
+	cap.set(cv.CAP_PROP_FRAME_HEIGHT, 1080)
 	cap.set(cv.CAP_PROP_AUTOFOCUS, 0) # Disable autofocus so we can manually control it
 	cap.set(cv.CAP_PROP_FOCUS, 0) # Set focus to 0 from the start
-	cap.set(cv.CAP_PROP_FRAME_WIDTH, 1280) # Set the image width
-	cap.set(cv.CAP_PROP_FRAME_HEIGHT, 720) # Set the image height
-	cap.set(cv.CAP_PROP_CONVERT_RGB, 0) # Only use gray-scale image
 	for i in range(0,10):
 		_status, _img = cap.read() # Let the camera stabilize itself by reading 10 frames
 	x = []
@@ -123,13 +126,13 @@ if __name__ == "__main__":
 			cap.read() # Read 9 images just to clear out the buffer and so we get new pictures
 		_status, img = cap.read()
 		fourcc = decode_fourcc(cap.get(cv.CAP_PROP_FOURCC))
-		if not bool(cap.get(cv.CAP_PROP_CONVERT_RGB)):
-			if fourcc == "MJPG":
-				img = cv.imdecode(img, cv.IMREAD_GRAYSCALE)
-			elif fourcc == "YUYV":
-				img = cv.cvtColor(img, cv.COLOR_YUV2GRAY_YUYV)
-			else:
-				print("Unsupported format")
+		if fourcc == "MJPG":
+			img = cv.imdecode(img, cv.IMREAD_GRAYSCALE)
+		elif fourcc == "YUYV":
+			img = cv.cvtColor(img, cv.COLOR_YUV2GRAY_YUYV)
+		else:
+			print("Unsupported format")
+			break
 		#cv.imshow("Testing", img)
 		#key = cv.waitKey(5000)
 		#if key == 27: # Esc
